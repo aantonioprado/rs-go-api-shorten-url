@@ -19,20 +19,26 @@ func NewHandler(db map[string]string) http.Handler {
 	r.Use(middleware.Logger)
 
 	r.Get("/", handlerGetIndex(db))
-	r.Get("/health", handlerGetHealth(db))
+	r.Get("/health", handlerGetHealth())
 	r.Get("/{code}", handlerGetShortenUrl(db))
 	r.Post("/api/shorten", handlerPostShortenUrl(db))
 
 	return r
 }
 
+var (
+	appName    = "ShortenAPI"
+	appVersion = "1.0.0"
+)
+
 type PostBody struct {
 	URL string `json:"url"`
 }
 
 type Response struct {
-	Error string `json:"error,omitempty"`
-	Data  any    `json:"data,omitempty"`
+	Error  string `json:"error,omitempty"`
+	Data   any    `json:"data,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 func sendJSON(w http.ResponseWriter, resp Response, status int) {
@@ -71,13 +77,28 @@ func genCode() string {
 
 func handlerGetIndex(db map[string]string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		sendJSON(
+			w,
+			Response{
+				Data: map[string]any{
+					"app":        appName,
+					"version":    appVersion,
+					"codesCount": len(db),
+				},
+				Status: "OK",
+			},
+			http.StatusOK,
+		)
 	}
 }
 
-func handlerGetHealth(db map[string]string) http.HandlerFunc {
+func handlerGetHealth() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		sendJSON(
+			w,
+			Response{Status: "OK"},
+			http.StatusOK,
+		)
 	}
 }
 
@@ -122,7 +143,12 @@ func handlerPostShortenUrl(db map[string]string) http.HandlerFunc {
 
 		sendJSON(
 			w,
-			Response{Data: map[string]string{"code": code}},
+			Response{
+				Data: map[string]string{
+					"code": code,
+				},
+				Status: "OK",
+			},
 			http.StatusOK,
 		)
 	}
