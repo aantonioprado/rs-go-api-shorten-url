@@ -83,7 +83,19 @@ func handlerGetHealth(db map[string]string) http.HandlerFunc {
 
 func handlerGetShortenUrl(db map[string]string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		code := chi.URLParam(r, "code")
+		data, ok := db[code]
 
+		if !ok {
+			sendJSON(
+				w,
+				Response{Error: "URL not found"},
+				http.StatusNotFound,
+			)
+			return
+		}
+
+		http.Redirect(w, r, data, http.StatusPermanentRedirect)
 	}
 }
 
