@@ -1,8 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"aantonioprado/rs-go-api-shorten-url/api"
 	"log/slog"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -15,6 +17,19 @@ func main() {
 }
 
 func run() error {
-	fmt.Println("Hello, World!")
+	handler := api.NewHandler()
+
+	s := http.Server{
+		Addr:         ":8080",
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  time.Minute,
+	}
+
+	if err := s.ListenAndServe(); err != nil {
+		return err
+	}
+
 	return nil
 }
