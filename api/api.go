@@ -7,17 +7,17 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewHandler() http.Handler {
+func NewHandler(db map[string]string) http.Handler {
 	r := chi.NewMux()
 
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 
-	r.Get("/", handlerGetIndex)
-	r.Get("/health", handlerGetHealth)
-	r.Get("/{code}", handlerGetShortenUrl)
-	r.Post("/api/shorten", handlerPostShortenUrl)
+	r.Get("/", handlerGetIndex(db))
+	r.Get("/health", handlerGetHealth(db))
+	r.Get("/{code}", handlerGetShortenUrl(db))
+	r.Post("/api/shorten", handlerPostShortenUrl(db))
 
 	return r
 }
@@ -31,16 +31,26 @@ type PostResponse struct {
 	Data  any    `json:"data,omitempty"`
 }
 
-func handlerGetIndex(w http.ResponseWriter, r *http.Request) {
+func handlerGetIndex(db map[string]string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
 }
 
-func handlerGetHealth(w http.ResponseWriter, r *http.Request) {
+func handlerGetHealth(db map[string]string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
 }
 
-func handlerGetShortenUrl(w http.ResponseWriter, r *http.Request) {
+func handlerGetShortenUrl(db map[string]string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
+	}
 }
 
-func handlerPostShortenUrl(w http.ResponseWriter, r *http.Request) {
+func handlerPostShortenUrl(db map[string]string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
+	}
 }
