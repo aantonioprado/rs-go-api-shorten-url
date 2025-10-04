@@ -9,7 +9,7 @@ import (
 
 type apiResponse struct {
 	Error string `json:"error,omitempty"`
-	Data  any    `json:"data, omitempty"`
+	Data  any    `json:"data,omitempty"`
 }
 
 func NewHandler(db map[string]string) http.Handler {
