@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aantonioprado/rs-go-api-shorten-url/api"
+	"aantonioprado/rs-go-api-shorten-url/internal/api"
 	"log/slog"
 	"net/http"
 	"time"
