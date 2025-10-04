@@ -2,9 +2,12 @@ package main
 
 import (
 	"aantonioprado/rs-go-api-shorten-url/internal/api"
+	"aantonioprado/rs-go-api-shorten-url/internal/store"
 	"log/slog"
 	"net/http"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -17,9 +20,15 @@ func main() {
 }
 
 func run() error {
-	db := make(map[string]string)
+	// db := make(map[string]string)
+	db := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
 
-	handler := api.NewHandler(db)
+	store := store.NewStore(db)
+	handler := api.NewHandler(store)
 
 	s := http.Server{
 		Addr:         ":8080",
